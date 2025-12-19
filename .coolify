@@ -1,0 +1,90 @@
+{
+  "name": "Chef by Convex",
+  "description": "AI app builder with backend knowledge",
+  "type": "docker",
+  "dockerfile": "Dockerfile",
+  "port": 3000,
+  "healthcheck": {
+    "path": "/api/health",
+    "interval": 30,
+    "timeout": 10,
+    "retries": 3
+  },
+  "environment": [
+    {
+      "key": "NODE_ENV",
+      "value": "production",
+      "required": true
+    },
+    {
+      "key": "PORT",
+      "value": "3000",
+      "required": true
+    },
+    {
+      "key": "VITE_CONVEX_URL",
+      "required": true,
+      "description": "Your Convex deployment URL (e.g., https://your-deployment.convex.cloud)"
+    },
+    {
+      "key": "CONVEX_DEPLOYMENT",
+      "required": true,
+      "description": "Your Convex deployment identifier (e.g., prod:your-deployment)"
+    },
+    {
+      "key": "VITE_WORKOS_CLIENT_ID",
+      "required": true,
+      "description": "WorkOS OAuth client ID"
+    },
+    {
+      "key": "VITE_WORKOS_REDIRECT_URI",
+      "required": true,
+      "description": "Your application URL for OAuth redirect"
+    },
+    {
+      "key": "VITE_WORKOS_API_HOSTNAME",
+      "value": "apiauth.convex.dev",
+      "required": true
+    },
+    {
+      "key": "WORKOS_CLIENT_ID",
+      "required": true,
+      "description": "WorkOS client ID (same as VITE_WORKOS_CLIENT_ID)"
+    },
+    {
+      "key": "BIG_BRAIN_HOST",
+      "value": "https://api.convex.dev",
+      "required": true
+    },
+    {
+      "key": "CONVEX_OAUTH_CLIENT_ID",
+      "required": true,
+      "description": "Convex OAuth client ID"
+    },
+    {
+      "key": "CONVEX_OAUTH_CLIENT_SECRET",
+      "required": true,
+      "description": "Convex OAuth client secret"
+    },
+    {
+      "key": "ANTHROPIC_API_KEY",
+      "required": false,
+      "description": "Optional: Anthropic API key for Claude models"
+    },
+    {
+      "key": "GOOGLE_API_KEY",
+      "required": false,
+      "description": "Optional: Google API key for Gemini models"
+    },
+    {
+      "key": "OPENAI_API_KEY",
+      "required": false,
+      "description": "Optional: OpenAI API key for GPT models"
+    },
+    {
+      "key": "XAI_API_KEY",
+      "required": false,
+      "description": "Optional: xAI API key for Grok models"
+    }
+  ]
+}

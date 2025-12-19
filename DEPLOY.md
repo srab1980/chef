@@ -46,10 +46,12 @@ Chef is a full-stack web application built with:
    ```
 
 2. Ensure the following files are present (they should be):
-   - `Dockerfile`
-   - `.dockerignore`
-   - `docker-compose.yml`
-   - `.env.example`
+   - `Dockerfile` - Multi-stage Docker build configuration
+   - `.dockerignore` - Files to exclude from Docker build
+   - `docker-compose.yml` - Local testing configuration
+   - `.env.example` - Template for required environment variables
+   - `nixpacks.toml` - Alternative build configuration for Coolify
+   - `.coolify` - Coolify configuration metadata (optional)
 
 ## Step 4: Configure Coolify
 
@@ -63,12 +65,21 @@ Chef is a full-stack web application built with:
 
 ### 4.2 Configure Build Settings
 
-In Coolify, configure the following:
+In Coolify, you have two options for building:
 
+**Option 1: Using Dockerfile (Recommended)**
 - **Build Pack**: Dockerfile
 - **Dockerfile Location**: `./Dockerfile`
 - **Port**: `3000`
-- **Health Check Path**: `/` (optional)
+- **Health Check Path**: `/api/health` (recommended)
+
+**Option 2: Using Nixpacks**
+- **Build Pack**: Nixpacks
+- Coolify will automatically detect the `nixpacks.toml` configuration
+- **Port**: `3000`
+- **Health Check Path**: `/api/health` (recommended)
+
+Both options will work. Dockerfile provides more control, while Nixpacks is simpler and may build faster.
 
 ### 4.3 Set Environment Variables
 
@@ -168,6 +179,21 @@ npx convex deploy --prod
 - Check logs in Coolify dashboard
 - Verify PORT environment variable is set to 3000
 - Ensure the build completed successfully
+- Check that all required environment variables are set (see `.env.example`)
+- Verify Node.js version compatibility (requires Node.js 20+)
+
+### Docker Build Fails with "pnpm not found"
+
+- If using Dockerfile, ensure npm registry is accessible
+- Try using the Nixpacks build option instead
+- Check if there are any network/firewall issues blocking package downloads
+
+### Health Check Failing
+
+- Verify the application is listening on port 3000
+- Check that `/api/health` endpoint is accessible
+- Increase the health check start period if the build takes longer
+- Review application logs for startup errors
 
 ## Local Testing with Docker
 

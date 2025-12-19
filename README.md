@@ -25,7 +25,7 @@ run Chef locally, you can follow the guide below.
 
 ### Deployment Options
 
-- **Hostinger with Coolify**: For self-hosted deployments, see [DEPLOY.md](./DEPLOY.md) for instructions on deploying to Hostinger using Coolify
+- **Hostinger with Coolify**: For self-hosted deployments, see [DEPLOY.md](./DEPLOY.md) for detailed instructions or [DEPLOY_QUICKSTART.md](./DEPLOY_QUICKSTART.md) for a quick start guide
 - **Local Development**: Follow the instructions below to run Chef locally
 
 > [!IMPORTANT]
