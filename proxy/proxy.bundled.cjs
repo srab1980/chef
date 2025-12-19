@@ -841,11 +841,19 @@ var httpProxy = require_http_proxy3();
 var proxy = httpProxy.createProxyServer({});
 proxy.on("error", function(err, req, res) {
   console.error("Proxy error:", err);
-  if (res.writeHead && !res.headersSent) {
-    res.writeHead(502);
-  }
-  if (res.end) {
-    res.end("Bad Gateway");
+  if (res && !res.headersSent && res.writable) {
+    try {
+      res.writeHead(502, { "Content-Type": "text/plain" });
+      res.end("Bad Gateway: Unable to connect to the target server");
+    } catch (e) {
+      console.error("Error sending 502 response:", e);
+    }
+  } else if (res && res.writable) {
+    try {
+      res.end();
+    } catch (e) {
+      console.error("Error ending response:", e);
+    }
   }
 });
 var server = http.createServer(function(req, res) {
@@ -860,14 +868,6 @@ server.listen(targetPort, () => {
 /*! Bundled license information:
 
 http-proxy/lib/http-proxy/passes/web-outgoing.js:
-  (*!
-   * Array of passes.
-   *
-   * A `pass` is just a function that is executed on `req, res, options`
-   * so that you can easily add new checks while still keeping the base
-   * flexible.
-   *)
-
 http-proxy/lib/http-proxy/passes/web-incoming.js:
   (*!
    * Array of passes.
