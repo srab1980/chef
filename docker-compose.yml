@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  chef:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      # Convex configuration
+      - VITE_CONVEX_URL=${VITE_CONVEX_URL}
+      - CONVEX_DEPLOYMENT=${CONVEX_DEPLOYMENT}
+      # WorkOS authentication
+      - VITE_WORKOS_CLIENT_ID=${VITE_WORKOS_CLIENT_ID}
+      - VITE_WORKOS_REDIRECT_URI=${VITE_WORKOS_REDIRECT_URI}
+      - VITE_WORKOS_API_HOSTNAME=${VITE_WORKOS_API_HOSTNAME}
+      - WORKOS_CLIENT_ID=${WORKOS_CLIENT_ID}
+      # Convex OAuth
+      - BIG_BRAIN_HOST=${BIG_BRAIN_HOST}
+      - CONVEX_OAUTH_CLIENT_ID=${CONVEX_OAUTH_CLIENT_ID}
+      - CONVEX_OAUTH_CLIENT_SECRET=${CONVEX_OAUTH_CLIENT_SECRET}
+      # AI Provider API Keys (optional)
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - XAI_API_KEY=${XAI_API_KEY:-}
+      # Sentry (optional)
+      - SENTRY_DSN=${SENTRY_DSN:-}
+      - SENTRY_VITE_PLUGIN_AUTH_TOKEN=${SENTRY_VITE_PLUGIN_AUTH_TOKEN:-}
+      # Vercel environment (optional for compatibility)
+      - VERCEL_ENV=${VERCEL_ENV:-production}
+      - VERCEL_GIT_COMMIT_SHA=${VERCEL_GIT_COMMIT_SHA:-}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

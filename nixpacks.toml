@@ -1,0 +1,17 @@
+[phases.setup]
+nixPkgs = ["nodejs-20_x", "pnpm"]
+# Note: Using nixpacks pnpm package. To use specific version like 9.5.0 in Dockerfile,
+# add: aptPkgs or use setup phase commands
+
+[phases.install]
+cmds = ["pnpm install --frozen-lockfile"]
+
+[phases.build]
+cmds = ["pnpm run build"]
+
+[start]
+cmd = "pnpm start"
+
+[variables]
+NODE_ENV = "production"
+PORT = "3000"

@@ -23,6 +23,11 @@ Visit our [documentation](https://docs.convex.dev/chef) to learn more about Chef
 The easiest way to build with Chef is through our hosted [webapp](https://chef.convex.dev), which includes a generous free tier. If you want to
 run Chef locally, you can follow the guide below.
 
+### Deployment Options
+
+- **Hostinger with Coolify**: For self-hosted deployments, see [DEPLOY.md](./DEPLOY.md) for detailed instructions or [DEPLOY_QUICKSTART.md](./DEPLOY_QUICKSTART.md) for a quick start guide
+- **Local Development**: Follow the instructions below to run Chef locally
+
 > [!IMPORTANT]
 > Chef is provided as-is, using an authentication configuration specific to Convex's internal control plane that manages user accounts.
 
