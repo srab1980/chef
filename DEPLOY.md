@@ -208,10 +208,30 @@ Before deploying to Coolify, you can test locally:
 
 ## Updating the Deployment
 
+### Manual Deployment
+
 1. Push changes to your Git repository
-2. In Coolify, trigger a new deployment (can be automatic on git push)
+2. In Coolify, trigger a new deployment manually
 3. Monitor the deployment logs
 4. If Convex schema changes, deploy Convex backend: `npx convex deploy --prod`
+
+### Automatic Deployment (Recommended)
+
+Coolify can automatically deploy when you push to your repository:
+
+1. In Coolify, enable "Auto Deploy" for your application
+2. Select the branch to watch (e.g., `main`)
+3. Coolify will automatically deploy on every push to that branch
+
+### CI/CD with GitHub Actions (Optional)
+
+For more control over deployments, you can use GitHub Actions:
+
+1. Get your Coolify webhook URL from the application settings
+2. Add it as a secret in your GitHub repository (`COOLIFY_WEBHOOK_URL`)
+3. Copy `.github/workflows/coolify-deploy.yml.example` to `.github/workflows/coolify-deploy.yml`
+4. Customize the workflow as needed
+5. Push changes to trigger automated deployments
 
 ## Security Considerations
 

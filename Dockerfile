@@ -42,7 +42,7 @@ RUN pnpm run build
 # Production stage
 FROM node:20-alpine AS runner
 
-# Install pnpm with retry logic
+# Install pnpm with retry logic (duplicated from base for multi-stage independence)
 RUN apk add --no-cache curl && \
     npm config set fetch-retry-mintimeout 20000 && \
     npm config set fetch-retry-maxtimeout 120000 && \
