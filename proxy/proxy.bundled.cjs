@@ -839,14 +839,24 @@ var targetPort = Number(process.argv[3]);
 var http = require("http");
 var httpProxy = require_http_proxy3();
 var proxy = httpProxy.createProxyServer({});
+function handleProxyError(res) {
+  if (!res || !res.writable) {
+    return;
+  }
+  try {
+    if (!res.headersSent) {
+      res.writeHead(502, { "Content-Type": "text/plain" });
+      res.end("Bad Gateway: Unable to connect to the target server");
+    } else {
+      res.end();
+    }
+  } catch (e) {
+    console.error("Error handling proxy error response:", e);
+  }
+}
 proxy.on("error", function(err, req, res) {
   console.error("Proxy error:", err);
-  if (res.writeHead && !res.headersSent) {
-    res.writeHead(502);
-  }
-  if (res.end) {
-    res.end("Bad Gateway");
-  }
+  handleProxyError(res);
 });
 var server = http.createServer(function(req, res) {
   proxy.web(req, res, { target: `http://localhost:${sourcePort}` });
@@ -860,14 +870,6 @@ server.listen(targetPort, () => {
 /*! Bundled license information:
 
 http-proxy/lib/http-proxy/passes/web-outgoing.js:
-  (*!
-   * Array of passes.
-   *
-   * A `pass` is just a function that is executed on `req, res, options`
-   * so that you can easily add new checks while still keeping the base
-   * flexible.
-   *)
-
 http-proxy/lib/http-proxy/passes/web-incoming.js:
   (*!
    * Array of passes.

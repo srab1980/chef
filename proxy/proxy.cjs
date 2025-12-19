@@ -5,15 +5,26 @@ const http = require('http');
 const httpProxy = require('http-proxy');
 const proxy = httpProxy.createProxyServer({});
 
-proxy.on('error', function (err, req, res) {
-  console.error('Proxy error:', err);
-  if (res.writeHead && !res.headersSent) {
-    res.writeHead(502);
+function handleProxyError(res) {
+  if (!res || !res.writable) {
+    return;
   }
 
-  if (res.end) {
-    res.end('Bad Gateway');
+  try {
+    if (!res.headersSent) {
+      res.writeHead(502, { 'Content-Type': 'text/plain' });
+      res.end('Bad Gateway: Unable to connect to the target server');
+    } else {
+      res.end();
+    }
+  } catch (e) {
+    console.error('Error handling proxy error response:', e);
   }
+}
+
+proxy.on('error', function (err, req, res) {
+  console.error('Proxy error:', err);
+  handleProxyError(res);
 });
 
 const server = http.createServer(function (req, res) {
