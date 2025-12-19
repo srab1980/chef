@@ -839,22 +839,24 @@ var targetPort = Number(process.argv[3]);
 var http = require("http");
 var httpProxy = require_http_proxy3();
 var proxy = httpProxy.createProxyServer({});
-proxy.on("error", function(err, req, res) {
-  console.error("Proxy error:", err);
-  if (res && !res.headersSent && res.writable) {
-    try {
+function handleProxyError(res) {
+  if (!res || !res.writable) {
+    return;
+  }
+  try {
+    if (!res.headersSent) {
       res.writeHead(502, { "Content-Type": "text/plain" });
       res.end("Bad Gateway: Unable to connect to the target server");
-    } catch (e) {
-      console.error("Error sending 502 response:", e);
-    }
-  } else if (res && res.writable) {
-    try {
+    } else {
       res.end();
-    } catch (e) {
-      console.error("Error ending response:", e);
     }
+  } catch (e) {
+    console.error("Error handling proxy error response:", e);
   }
+}
+proxy.on("error", function(err, req, res) {
+  console.error("Proxy error:", err);
+  handleProxyError(res);
 });
 var server = http.createServer(function(req, res) {
   proxy.web(req, res, { target: `http://localhost:${sourcePort}` });
